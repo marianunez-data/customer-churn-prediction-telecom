@@ -1,0 +1,45 @@
+{
+  "evaluation_set": "X_test",
+  "rows": 705,
+  "n_positives": 187,
+  "n_negatives": 518,
+  "threshold": 0.5,
+  "threshold_note": "Standard reference \u03b8=0.50 \u2014 optimal determined in \u00a77",
+  "calibrator": "platt",
+  "calibrated": {
+    "auc": 0.9078,
+    "pr_auc": 0.825,
+    "brier": 0.1013,
+    "recall": 0.6257,
+    "precision": 0.8069,
+    "f1": 0.7048,
+    "tp": 117,
+    "fp": 28,
+    "tn": 490,
+    "fn": 70
+  },
+  "raw": {
+    "auc": 0.9078,
+    "pr_auc": 0.825,
+    "brier": 0.102,
+    "recall": 0.7219,
+    "precision": 0.7337,
+    "f1": 0.7278,
+    "tp": 135,
+    "fp": 49,
+    "tn": 469,
+    "fn": 52
+  },
+  "generalization": {
+    "val_auc": 0.9161,
+    "test_auc": 0.9078,
+    "auc_delta": -0.0083,
+    "val_brier": 0.0993,
+    "test_brier": 0.1013,
+    "brier_delta": 0.002,
+    "val_f1": 0.7417,
+    "test_f1": 0.7048,
+    "f1_delta": -0.0369
+  },
+  "timestamp": "2026-03-12T10:58:13.534833"
+}

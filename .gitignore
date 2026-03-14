@@ -1,0 +1,31 @@
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+
+# Datos raw — privados
+data/raw/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# IDEs y OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs y MLflow
+*.log
+mlruns/
+
+# Arrays SHAP grandes (se regeneran desde el notebook)
+reports/*.npy

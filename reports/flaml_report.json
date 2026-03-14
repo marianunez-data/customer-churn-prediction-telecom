@@ -1,0 +1,50 @@
+{
+  "search_space": [
+    "lgbm",
+    "xgboost"
+  ],
+  "time_budget_s": 180,
+  "constrained": true,
+  "constraints_applied": {
+    "num_leaves": [
+      15,
+      64
+    ],
+    "n_estimators": [
+      100,
+      800
+    ],
+    "learning_rate": [
+      0.01,
+      0.3
+    ]
+  },
+  "best_estimator": "lgbm",
+  "best_config": {
+    "n_estimators": 799,
+    "num_leaves": 17,
+    "min_child_samples": 5,
+    "learning_rate": 0.06859879233887671,
+    "log_max_bin": 8,
+    "colsample_bytree": 0.9253539584169304,
+    "reg_alpha": 0.6659242146365238,
+    "reg_lambda": 0.015053452277343359
+  },
+  "val_metrics": {
+    "ROC_AUC": 0.9234,
+    "PR_AUC": 0.8427,
+    "Brier_Score": 0.094,
+    "Recall": 0.6929,
+    "Precision": 0.822,
+    "F1": 0.7519
+  },
+  "baseline_winner": "XGBoost",
+  "baseline_winner_auc": 0.9128,
+  "delta_auc_vs_baseline": 0.0106,
+  "search_time_s": 179.95,
+  "peak_memory_mb": 33.3,
+  "training_rows": 5282,
+  "val_rows": 1056,
+  "n_features": 18,
+  "timestamp": "2026-03-11T21:20:17.933492"
+}

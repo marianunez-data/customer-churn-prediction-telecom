@@ -1,0 +1,56 @@
+{
+  "calibration_set": "X_val",
+  "calibration_rows": 1056,
+  "n_positives_val": 280,
+  "n_negatives_val": 776,
+  "cv_brier_reference": 0.1033,
+  "winner": "platt",
+  "deployed_threshold": 0.5,
+  "raw": {
+    "brier": 0.104,
+    "auc": 0.9161
+  },
+  "platt": {
+    "brier": 0.0993,
+    "auc": 0.9161,
+    "recall": 0.7179,
+    "precision": 0.7672,
+    "f1": 0.7417,
+    "improvement_pct": 4.5,
+    "fit_time_s": 0.0046
+  },
+  "isotonic": {
+    "brier": 0.0927,
+    "auc": 0.9212,
+    "recall": 0.6821,
+    "precision": 0.8162,
+    "f1": 0.7432,
+    "improvement_pct": 10.9,
+    "fit_time_s": 0.0014
+  },
+  "brier_delta_iso_minus_platt": -0.0066,
+  "relative_margin_pct": 6.6,
+  "timestamp": "2026-03-12T10:25:19.515164",
+  "platt_ccv_fresh": {
+    "brier": 0.0977,
+    "auc": 0.9185,
+    "recall": 0.6929,
+    "precision": 0.7951,
+    "f1": 0.7405,
+    "improvement_pct": 6.1,
+    "fit_time_s": 1.84,
+    "note": "fresh pipeline cv=5 on X_train"
+  },
+  "isotonic_ccv_fresh": {
+    "brier": 0.0972,
+    "auc": 0.9174,
+    "recall": 0.6536,
+    "precision": 0.8243,
+    "f1": 0.7291,
+    "improvement_pct": 6.5,
+    "fit_time_s": 1.71,
+    "note": "fresh pipeline cv=5 on X_train"
+  },
+  "artefact_size_kb": 1479.2,
+  "base_size_kb": 1477.4
+}

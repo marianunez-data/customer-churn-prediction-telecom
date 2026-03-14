@@ -1,0 +1,353 @@
+{
+  "success": true,
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_table_row_count_to_be_between",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "min_value": 1000,
+          "max_value": 100000
+        },
+        "meta": {},
+        "id": "e2bf64d9-a7ca-40b0-b1d0-d1a2205d4083",
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": 7043
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_table_column_count_to_equal",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "value": 20
+        },
+        "meta": {},
+        "id": "5ccf1bcf-fae7-4197-b032-67df3cc446b3",
+        "severity": "critical"
+      },
+      "result": {
+        "observed_value": 20
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "customer_id"
+        },
+        "meta": {},
+        "id": "3e40ad9c-3151-4d74-ab59-9a8cfa5c7d2a",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "customer_id"
+        },
+        "meta": {},
+        "id": "46193b2d-f0f5-41c1-b44c-861d44e11044",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "monthly_charges",
+          "min_value": 0.0,
+          "max_value": 200.0
+        },
+        "meta": {},
+        "id": "72087f30-8154-407b-8879-fb84001d3e6b",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "total_charges",
+          "min_value": 0.0,
+          "max_value": 15000.0
+        },
+        "meta": {},
+        "id": "a7d50bb8-d8ea-4d65-95cc-71917247a76f",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "type",
+          "value_set": [
+            "Month-to-month",
+            "One year",
+            "Two year"
+          ]
+        },
+        "meta": {},
+        "id": "d8742b22-b170-4909-9d7d-0727c407168a",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "gender",
+          "value_set": [
+            "Male",
+            "Female"
+          ]
+        },
+        "meta": {},
+        "id": "5289193f-8527-443d-a8a4-f7c061568b64",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "senior_citizen",
+          "value_set": [
+            "No",
+            "Yes"
+          ]
+        },
+        "meta": {},
+        "id": "6057d76f-04ba-40cc-8e3f-8f4ec3b27998",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "batch_id": "clean_gate-clean_data",
+          "column": "internet_service",
+          "value_set": [
+            "DSL",
+            "Fiber optic",
+            "No service"
+          ]
+        },
+        "meta": {},
+        "id": "7262416a-e200-4c0b-be5f-40508c74bb51",
+        "severity": "critical"
+      },
+      "result": {
+        "element_count": 7043,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "partial_unexpected_list": [],
+        "missing_count": 0,
+        "missing_percent": 0.0,
+        "unexpected_percent_total": 0.0,
+        "unexpected_percent_nonmissing": 0.0,
+        "partial_unexpected_counts": [],
+        "partial_unexpected_index_list": []
+      },
+      "meta": {},
+      "exception_info": {
+        "raised_exception": false,
+        "exception_traceback": null,
+        "exception_message": null
+      }
+    }
+  ],
+  "suite_name": "clean_suite",
+  "suite_parameters": {},
+  "statistics": {
+    "evaluated_expectations": 10,
+    "successful_expectations": 10,
+    "unsuccessful_expectations": 0,
+    "success_percent": 100.0
+  },
+  "meta": {
+    "great_expectations_version": "1.13.0",
+    "batch_spec": {
+      "batch_data": "PandasDataFrame"
+    },
+    "batch_markers": {
+      "ge_load_time": "20260311T115210.651513Z",
+      "pandas_data_fingerprint": "09eb988544bcbf1df6abd62e5a6eaa2f"
+    },
+    "active_batch_definition": {
+      "datasource_name": "clean_gate",
+      "data_connector_name": "fluent",
+      "data_asset_name": "clean_data",
+      "batch_identifiers": {
+        "dataframe": "<DATAFRAME>"
+      }
+    },
+    "validation_id": "8fa4319b-7540-4971-98a5-6656c258deb4",
+    "checkpoint_id": null,
+    "run_id": {
+      "run_name": null,
+      "run_time": "2026-03-11T12:52:10.706455+01:00"
+    },
+    "validation_time": "2026-03-11T11:52:10.706455+00:00",
+    "batch_parameters": {
+      "dataframe": "<DATAFRAME>"
+    }
+  },
+  "id": null
+}

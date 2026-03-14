@@ -1,0 +1,71 @@
+{
+  "evaluation_set": "validation",
+  "n_train": 5282,
+  "n_val": 1056,
+  "global_churn_rate": 0.2654,
+  "class_imbalance": 2.77,
+  "winner": "XGBoost",
+  "winner_auc": 0.9128,
+  "advancing_to_automl": [
+    "XGBoost",
+    "LightGBM"
+  ],
+  "models": {
+    "Dummy (floor)": {
+      "ROC_AUC": 0.5,
+      "PR_AUC": 0.2652,
+      "Brier_Score": 0.2652,
+      "Recall": 0.0,
+      "Precision": 0.0,
+      "F1": 0.0,
+      "Train_Time_s": 0.065,
+      "Peak_Memory_MB": 1.7,
+      "Imbalance_Strategy": "none"
+    },
+    "Logistic Regression": {
+      "ROC_AUC": 0.8432,
+      "PR_AUC": 0.6321,
+      "Brier_Score": 0.1711,
+      "Recall": 0.825,
+      "Precision": 0.5077,
+      "F1": 0.6286,
+      "Train_Time_s": 0.08,
+      "Peak_Memory_MB": 4.3,
+      "Imbalance_Strategy": "class_weight=balanced"
+    },
+    "Random Forest": {
+      "ROC_AUC": 0.8486,
+      "PR_AUC": 0.6675,
+      "Brier_Score": 0.1329,
+      "Recall": 0.5107,
+      "Precision": 0.6875,
+      "F1": 0.5861,
+      "Train_Time_s": 0.863,
+      "Peak_Memory_MB": 10.5,
+      "Imbalance_Strategy": "class_weight=balanced_subsample"
+    },
+    "XGBoost": {
+      "ROC_AUC": 0.9128,
+      "PR_AUC": 0.8204,
+      "Brier_Score": 0.1066,
+      "Recall": 0.7714,
+      "Precision": 0.6923,
+      "F1": 0.7297,
+      "Train_Time_s": 0.169,
+      "Peak_Memory_MB": 1.7,
+      "Imbalance_Strategy": "scale_pos_weight=2.77"
+    },
+    "LightGBM": {
+      "ROC_AUC": 0.9051,
+      "PR_AUC": 0.8076,
+      "Brier_Score": 0.1186,
+      "Recall": 0.7893,
+      "Precision": 0.6173,
+      "F1": 0.6928,
+      "Train_Time_s": 0.113,
+      "Peak_Memory_MB": 2.6,
+      "Imbalance_Strategy": "is_unbalance=True"
+    }
+  },
+  "timestamp": "2026-03-11T16:11:44.079586"
+}

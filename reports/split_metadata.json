@@ -1,0 +1,67 @@
+{
+  "split_strategy": "stratified_random",
+  "random_state": 42,
+  "cutoff_date": "2020-02-01",
+  "splits": {
+    "train": {
+      "rows": 5282,
+      "pct": 0.75,
+      "churn_rate": 0.2654
+    },
+    "validation": {
+      "rows": 1056,
+      "pct": 0.1499,
+      "churn_rate": 0.2652
+    },
+    "test": {
+      "rows": 705,
+      "pct": 0.1001,
+      "churn_rate": 0.2652
+    }
+  },
+  "total_rows": 7043,
+  "global_churn_rate": 0.2654,
+  "n_features": 18,
+  "feature_names": [
+    "type",
+    "paperless_billing",
+    "payment_method",
+    "monthly_charges",
+    "total_charges",
+    "gender",
+    "senior_citizen",
+    "partner",
+    "dependents",
+    "internet_service",
+    "online_security",
+    "online_backup",
+    "device_protection",
+    "tech_support",
+    "streaming_tv",
+    "streaming_movies",
+    "multiple_lines",
+    "tenure_days"
+  ],
+  "cat_cols": [
+    "type",
+    "paperless_billing",
+    "payment_method",
+    "gender",
+    "senior_citizen",
+    "partner",
+    "dependents",
+    "internet_service",
+    "online_security",
+    "online_backup",
+    "device_protection",
+    "tech_support",
+    "streaming_tv",
+    "streaming_movies",
+    "multiple_lines"
+  ],
+  "num_cols": [
+    "monthly_charges",
+    "total_charges",
+    "tenure_days"
+  ]
+}
