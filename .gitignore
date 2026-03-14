@@ -28,4 +28,3 @@ Thumbs.db
 mlruns/
 
 # Arrays SHAP grandes (se regeneran desde el notebook)
-reports/*.npy
