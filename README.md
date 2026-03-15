@@ -11,10 +11,11 @@
 
 ## Live
 
-|                     |                                           |
-| ------------------- | ----------------------------------------- |
-| Streamlit Dashboard | https://churn-intelligence.streamlit.app/ |
-| FastAPI             | https://churn-api-ynok.onrender.com/docs  |
+|                     |                                                                           |
+| ------------------- | ------------------------------------------------------------------------- |
+| Streamlit Dashboard | https://churn-intelligence.streamlit.app/                                 |
+| HuggingFace Space   | https://huggingface.co/spaces/marianunez-data/customer-churn-intelligence |
+| FastAPI             | https://churn-api-ynok.onrender.com/docs                                  |
 
 ---
 
@@ -33,15 +34,14 @@
 
 ## Tech Stack
 
-
 |                        |                                                                                                                                                         |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **ML**                 | LightGBM · XGBoost · scikit-learn · FLAML AutoML · SHAP (waterfall / beeswarm / dependence) · Platt Calibration · StratifiedKFold · OOF threshold sweep |
 | **Data & ETL**         | pandas · NumPy · sklearn Pipeline · ColumnTransformer · OrdinalEncoder · Great Expectations · ETL pipeline                                              |
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
-| **Dashboard**          | Streamlit · Plotly · Matplotlib · Streamlit Cloud                                                                                                       |
+| **Dashboard**          | Streamlit · Plotly · Matplotlib · Streamlit Cloud · HuggingFace Spaces                                                                                  |
+| **Containers**         | Docker · Docker Compose                                                                                                                                 |
 | **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub                                                                                                              |
-
 
 ---
 
@@ -75,6 +75,9 @@ customer-churn-prediction-telecom/
 ├── tests/                        # 119 tests — pytest + Great Expectations
 ├── notebook/
 │   └── customer_churn_analysis.ipynb
+├── Dockerfile                    # FastAPI production image
+├── Dockerfile.streamlit          # Streamlit production image
+├── docker-compose.yml            # Orchestrates API + Dashboard locally
 └── pytest.ini
 ```
 
@@ -108,21 +111,18 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r app/requirements.txt
 ```
 
-**Dashboard**
 ```bash
-streamlit run app/dashboard.py
+streamlit run app/dashboard.py        # Dashboard → http://localhost:8501
+uvicorn src.api.main:app --reload     # API       → http://localhost:8000/docs
+pytest tests/ -q                      # 119 passed
 ```
 
-**API**
-```bash
-uvicorn src.api.main:app --reload --port 8000
-# Interactive docs → http://localhost:8000/docs
-```
+### Local — Docker
 
-**Tests**
 ```bash
-pytest tests/ -q
-# 119 passed
+docker-compose up --build
+# Dashboard → http://localhost:8501
+# API       → http://localhost:8000/docs
 ```
 
 ---
