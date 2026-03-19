@@ -86,23 +86,23 @@ def load_test_predictions():
     return pd.read_csv(PROJECT_ROOT / 'reports' / 'final_results_test.csv')
 
 @st.cache_data
-def load_demo_customers():
-    """Load original (non-encoded) customer features for profile display."""
-    path = PROJECT_ROOT / 'data' / 'processed' / 'demo_customers.csv'
-    df = pd.read_csv(path, index_col=0)
-    df.index = df.index.astype(int)
-    return df
+def load_original_features():
+    """Load original (pre-encoded) feature values for profile display."""
+    p = PROJECT_ROOT / 'data' / 'processed' / 'demo_customers.csv'
+    if p.exists():
+        return pd.read_csv(p, index_col=0)
+    return None
 
 @st.cache_data
 def build_shap_index(test_preds_df):
     return {row['customer_id']: idx
             for idx, row in test_preds_df.reset_index(drop=True).iterrows()}
 
-artifact      = load_artifact()
+artifact   = load_artifact()
 shap_vals, shap_base, shap_data, feat_names = load_shap_precomputed()
-test_preds    = load_test_predictions()
-demo_customers = load_demo_customers()
-shap_index    = build_shap_index(test_preds)
+test_preds     = load_test_predictions()
+shap_index     = build_shap_index(test_preds)
+original_feats = load_original_features()
 
 pipe      = artifact['base_pipeline']
 platt     = artifact['calibrator']
@@ -111,11 +111,33 @@ cat_cols  = artifact['cat_cols']
 num_cols  = artifact['num_cols']
 REQUIRED_COLS = cat_cols + num_cols
 
+# Print exact categories known by encoder (for debugging)
+try:
+    enc = pipe.named_steps['preprocessor'].transformers_[0][1]
+    KNOWN_CATS = {col: list(cats) for col, cats in zip(cat_cols, enc.categories_)}
+except Exception:
+    KNOWN_CATS = {}
+
 # ── Helpers ────────────────────────────────────────────────────────────────
 def infer_single(row_dict: dict) -> dict:
-    df  = pd.DataFrame([row_dict])
-    raw = pipe.predict_proba(df[REQUIRED_COLS])[:, 1]
-    cal = platt.predict_proba(raw.reshape(-1, 1))[:, 1][0]
+    df = pd.DataFrame([row_dict])
+    # sklearn 1.8 + Python 3.14 are strict — no mixed types allowed
+    # Cast every cat col to clean str, every num col to float64
+    for c in cat_cols:
+        if c in df.columns:
+            df[c] = df[c].astype(str).str.strip()
+    for c in num_cols:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors='coerce').astype('float64')
+    # Force object dtype on cat cols to avoid pandas inferring int/float
+    df[cat_cols] = df[cat_cols].astype(object)
+    df = df[REQUIRED_COLS]
+    try:
+        raw = pipe.predict_proba(df)[:, 1]
+    except Exception as e:
+        st.error(f"Pipeline error: {e}")
+        return {'p_churn': 0.0, 'flagged': 0, 'risk_tier': 'Low'}
+    cal  = platt.predict_proba(raw.reshape(-1, 1))[:, 1][0]
     tier = 'High' if cal >= 0.60 else ('Medium' if cal >= 0.30 else 'Low')
     return {'p_churn': cal, 'flagged': int(cal >= threshold), 'risk_tier': tier}
 
@@ -123,6 +145,13 @@ def infer_single(row_dict: dict) -> dict:
 def compute_shap_single(row_dict: dict):
     import shap
     df = pd.DataFrame([row_dict])
+    for c in cat_cols:
+        if c in df.columns:
+            df[c] = df[c].astype(str).str.strip()
+    for c in num_cols:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors='coerce').astype('float64')
+    df[cat_cols] = df[cat_cols].astype(object)
     preprocessor = pipe.named_steps['preprocessor']
     classifier   = pipe.named_steps['classifier']
     X_t = preprocessor.transform(df[REQUIRED_COLS])
@@ -265,7 +294,6 @@ if mode == "🔍  Search by Customer ID":
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("</div>", unsafe_allow_html=True)
 
     with col_info:
         row  = test_preds[test_preds['customer_id'] == selected_id].iloc[0]
@@ -298,58 +326,43 @@ if mode == "🔍  Search by Customer ID":
             bv_row   = float(shap_base[shap_idx]) if shap_base.ndim > 0 else float(shap_base)
             fv_row   = shap_data[shap_idx]
 
-            # Profile grid — use original readable values from demo_customers.csv
-            st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-            st.markdown("<div class='section-title'>Customer Profile</div>",
-                        unsafe_allow_html=True)
-            profile_html = "<div class='profile-grid'>"
-            if selected_id in demo_customers.index:
-                orig_row = demo_customers.loc[selected_id]
-                for name in feat_names:
-                    if name in orig_row.index:
-                        val = orig_row[name]
-                        if isinstance(val, float) and val == int(val):
-                            display_val = str(int(val))
-                        elif isinstance(val, float):
-                            display_val = f'{val:.2f}'
-                        else:
-                            display_val = str(val)
-                    else:
-                        # fallback to encoded value
-                        i = feat_names.index(name)
-                        display_val = f'{fv_row[i]:.2f}'
+            with st.container(border=True):
+                st.markdown("<div class='section-title'>Customer Profile</div>",
+                            unsafe_allow_html=True)
+                # Use original (pre-encoded) values if available
+                if original_feats is not None and selected_id in original_feats.index:
+                    orig_row = original_feats.loc[selected_id]
+                    profile_items = [(name, orig_row.get(name, fv_row[i]))
+                                     for i, name in enumerate(feat_names)]
+                else:
+                    profile_items = [(name, fv_row[i])
+                                     for i, name in enumerate(feat_names)]
+
+                profile_html = "<div class='profile-grid'>"
+                for name, val in profile_items:
+                    display_val = f'{val:.2f}' if isinstance(val, float) and not isinstance(val, int) else str(val)
                     profile_html += (f"<div class='prof-item'>"
                                      f"<div class='prof-lbl'>{name}</div>"
                                      f"<div class='prof-val'>{display_val}</div></div>")
-            else:
-                # fallback to encoded values if customer not in demo_customers
-                for name, val in zip(feat_names, fv_row):
-                    display_val = f'{val:.2f}' if isinstance(val, float) else str(val)
-                    profile_html += (f"<div class='prof-item'>"
-                                     f"<div class='prof-lbl'>{name}</div>"
-                                     f"<div class='prof-val'>{display_val}</div></div>")
-            profile_html += "</div>"
-            st.markdown(profile_html, unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+                profile_html += "</div>"
+                st.markdown(profile_html, unsafe_allow_html=True)
 
-            # SHAP waterfall
-            st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-            st.markdown("<div class='section-title'>SHAP Explanation — Why this score?</div>",
-                        unsafe_allow_html=True)
-            fig = waterfall_plotly(sv_row, bv_row, feat_names, fv_row,
-                                   f"Customer {selected_id} — P(churn)={p:.3f}", p)
-            st.plotly_chart(fig, use_container_width=True)
+            with st.container(border=True):
+                st.markdown("<div class='section-title'>SHAP Explanation — Why this score?</div>",
+                            unsafe_allow_html=True)
+                fig = waterfall_plotly(sv_row, bv_row, feat_names, fv_row,
+                                       f"Customer {selected_id} — P(churn)={p:.3f}", p)
+                st.plotly_chart(fig, width="stretch")
 
-            feat_df = (pd.DataFrame({
-                'Feature':     feat_names,
-                'Value':       [f'{v:.2f}' if isinstance(v, float) else str(v)
-                                for v in fv_row],
-                'SHAP Impact': sv_row.round(4),
-                'Direction':   ['🔴 Increases risk' if v > 0 else '🔵 Reduces risk'
-                                for v in sv_row],
-            }).sort_values('SHAP Impact', key=abs, ascending=False).head(8))
-            st.dataframe(feat_df, use_container_width=True, hide_index=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+                feat_df = (pd.DataFrame({
+                    'Feature':     feat_names,
+                    'Value':       [f'{v:.2f}' if isinstance(v, float) else str(v)
+                                    for v in fv_row],
+                    'SHAP Impact': sv_row.round(4),
+                    'Direction':   ['🔴 Increases risk' if v > 0 else '🔵 Reduces risk'
+                                    for v in sv_row],
+                }).sort_values('SHAP Impact', key=abs, ascending=False).head(8))
+                st.dataframe(feat_df, width="stretch", hide_index=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -366,46 +379,58 @@ else:
     col_form, col_result = st.columns([1, 1], gap="large")
 
     with col_form:
-        st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-        st.markdown("<div class='section-title'>Contract & Services</div>",
-                    unsafe_allow_html=True)
-        f_type     = st.selectbox("Contract Type",
-                                  ['Month-to-month', 'One year', 'Two year'],
-                                  help="Month-to-month = highest churn risk")
-        f_internet = st.selectbox("Internet Service", ['Fiber optic', 'DSL', 'No'])
-        f_security = st.selectbox("Online Security",  ['No', 'Yes', 'No internet service'])
-        f_backup   = st.selectbox("Online Backup",    ['No', 'Yes', 'No internet service'])
-        f_device   = st.selectbox("Device Protection",['No', 'Yes', 'No internet service'])
-        f_tech     = st.selectbox("Tech Support",     ['No', 'Yes', 'No internet service'])
-        f_tv       = st.selectbox("Streaming TV",     ['No', 'Yes', 'No internet service'])
-        f_movies   = st.selectbox("Streaming Movies", ['No', 'Yes', 'No internet service'])
-        f_lines    = st.selectbox("Multiple Lines",   ['No', 'Yes', 'No phone service'])
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("<div class='section-title'>Contract & Services</div>",
+                        unsafe_allow_html=True)
+            # Use exact categories from the trained encoder when available
+            def opts(col, fallback):
+                return KNOWN_CATS.get(col, fallback)
 
-        st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-        st.markdown("<div class='section-title'>Billing & Demographics</div>",
-                    unsafe_allow_html=True)
-        f_paperless = st.selectbox("Paperless Billing", ['Yes', 'No'])
-        f_payment   = st.selectbox("Payment Method",
-                                   ['Electronic check', 'Mailed check',
-                                    'Bank transfer (automatic)',
-                                    'Credit card (automatic)'])
-        f_gender    = st.selectbox("Gender",     ['Male', 'Female'])
-        f_senior    = st.selectbox("Senior Citizen", ['No', 'Yes'])
-        f_partner   = st.selectbox("Partner",    ['No', 'Yes'])
-        f_depends   = st.selectbox("Dependents", ['No', 'Yes'])
-        st.markdown("</div>", unsafe_allow_html=True)
+            f_type     = st.selectbox("Contract Type",
+                                      opts('type', ['Month-to-month', 'One year', 'Two year']),
+                                      help="Month-to-month = highest churn risk")
+            f_internet = st.selectbox("Internet Service",
+                                      opts('internet_service', ['DSL', 'Fiber optic', 'No']))
+            f_security = st.selectbox("Online Security",
+                                      opts('online_security', ['No', 'No internet service', 'Yes']))
+            f_backup   = st.selectbox("Online Backup",
+                                      opts('online_backup', ['No', 'No internet service', 'Yes']))
+            f_device   = st.selectbox("Device Protection",
+                                      opts('device_protection', ['No', 'No internet service', 'Yes']))
+            f_tech     = st.selectbox("Tech Support",
+                                      opts('tech_support', ['No', 'No internet service', 'Yes']))
+            f_tv       = st.selectbox("Streaming TV",
+                                      opts('streaming_tv', ['No', 'No internet service', 'Yes']))
+            f_movies   = st.selectbox("Streaming Movies",
+                                      opts('streaming_movies', ['No', 'No internet service', 'Yes']))
+            f_lines    = st.selectbox("Multiple Lines",
+                                      opts('multiple_lines', ['No', 'No phone service', 'Yes']))
 
-        st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-        st.markdown("<div class='section-title'>Usage & Tenure</div>",
-                    unsafe_allow_html=True)
-        f_tenure  = st.slider("Tenure (days)",        0,   2555, 180,
-                              help="Low tenure = highest risk zone")
-        f_monthly = st.slider("Monthly Charges ($)", 18.0, 120.0, 70.0, step=0.5)
-        f_total   = st.slider("Total Charges ($)",    0.0, 9000.0,
-                              float(round(f_tenure * f_monthly / 30, 2)),
-                              step=10.0)
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("<div class='section-title'>Billing & Demographics</div>",
+                        unsafe_allow_html=True)
+            f_paperless = st.selectbox("Paperless Billing",
+                                       opts('paperless_billing', ['No', 'Yes']))
+            f_payment   = st.selectbox("Payment Method",
+                                       opts('payment_method',
+                                            ['Bank transfer (automatic)',
+                                             'Credit card (automatic)',
+                                             'Electronic check',
+                                             'Mailed check']))
+            f_gender    = st.selectbox("Gender",         opts('gender', ['Female', 'Male']))
+            f_senior    = st.selectbox("Senior Citizen", ['No', 'Yes'])
+            f_partner   = st.selectbox("Partner",        opts('partner', ['No', 'Yes']))
+            f_depends   = st.selectbox("Dependents",     opts('dependents', ['No', 'Yes']))
+
+        with st.container(border=True):
+            st.markdown("<div class='section-title'>Usage & Tenure</div>",
+                        unsafe_allow_html=True)
+            f_tenure  = st.slider("Tenure (days)",        0,   2555, 180,
+                                  help="Low tenure = highest risk zone")
+            f_monthly = st.slider("Monthly Charges ($)", 18.0, 120.0, 70.0, step=0.5)
+            f_total   = st.slider("Total Charges ($)",    0.0, 9000.0,
+                                  float(round(f_tenure * f_monthly / 30, 2)),
+                                  step=10.0)
 
     with col_result:
         profile = {
@@ -486,42 +511,40 @@ else:
             height=260,
             margin=dict(l=20, r=20, t=40, b=10),
         )
-        st.plotly_chart(fig_g, use_container_width=True)
+        st.plotly_chart(fig_g, width="stretch")
 
         # SHAP on demand
-        st.markdown("<div class='section-card'>", unsafe_allow_html=True)
-        st.markdown("<div class='section-title'>SHAP Explanation</div>",
-                    unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("<div class='section-title'>SHAP Explanation</div>",
+                        unsafe_allow_html=True)
 
-        if st.button("⚡ Explain this prediction", use_container_width=True):
-            with st.spinner("Computing SHAP values..."):
-                sv_new = compute_shap_single(profile)
-                sv_row = sv_new.values[0]
-                bv_row = float(sv_new.base_values[0])
-                fv_row = sv_new.data[0]
+            if st.button("⚡ Explain this prediction", width="stretch"):
+                with st.spinner("Computing SHAP values..."):
+                    sv_new = compute_shap_single(profile)
+                    sv_row = sv_new.values[0]
+                    bv_row = float(sv_new.base_values[0])
+                    fv_row = sv_new.data[0]
 
-            fig_wf = waterfall_plotly(sv_row, bv_row, feat_names, fv_row,
-                                      "Manual Profile — SHAP Waterfall", p)
-            st.plotly_chart(fig_wf, use_container_width=True)
+                fig_wf = waterfall_plotly(sv_row, bv_row, feat_names, fv_row,
+                                          "Manual Profile — SHAP Waterfall", p)
+                st.plotly_chart(fig_wf, width="stretch")
 
-            feat_df = (pd.DataFrame({
-                'Feature':     feat_names,
-                'Value':       [f'{v:.2f}' if isinstance(v, float) else str(v)
-                                for v in fv_row],
-                'SHAP Impact': sv_row.round(4),
-                'Direction':   ['🔴 Increases risk' if v > 0 else '🔵 Reduces risk'
-                                for v in sv_row],
-            }).sort_values('SHAP Impact', key=abs, ascending=False).head(8))
-            st.dataframe(feat_df, use_container_width=True, hide_index=True)
-        else:
-            st.markdown("""
-            <div style='text-align:center;padding:32px;color:#8A9BB8;
-                        font-family:IBM Plex Mono,monospace;font-size:12px;'>
-                Click above to compute<br>SHAP feature contributions
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
+                feat_df = (pd.DataFrame({
+                    'Feature':     feat_names,
+                    'Value':       [f'{v:.2f}' if isinstance(v, float) else str(v)
+                                    for v in fv_row],
+                    'SHAP Impact': sv_row.round(4),
+                    'Direction':   ['🔴 Increases risk' if v > 0 else '🔵 Reduces risk'
+                                    for v in sv_row],
+                }).sort_values('SHAP Impact', key=abs, ascending=False).head(8))
+                st.dataframe(feat_df, width="stretch", hide_index=True)
+            else:
+                st.markdown("""
+                <div style='text-align:center;padding:32px;color:#8A9BB8;
+                            font-family:IBM Plex Mono,monospace;font-size:12px;'>
+                    Click above to compute<br>SHAP feature contributions
+                </div>
+                """, unsafe_allow_html=True)
 
 # ── Footer ────────────────────────────────────────────────────────────────
 st.markdown("""
