@@ -26,7 +26,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r app/requirements.txt
-          pip install pytest httpx great-expectations==0.18.19
+          pip install pytest httpx great-expectations
 
       - name: Run tests
         run: |
