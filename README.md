@@ -41,7 +41,7 @@
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
 | **Dashboard**          | Streamlit · Plotly · Matplotlib · Streamlit Cloud · HuggingFace Spaces                                                                                  |
 | **Containers**         | Docker · Docker Compose                                                                                                                                 |
-| **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub(CI/CD)                                                                                                       |
+| **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub Actions (CI/CD)                                                                                              |
 
 ---
 
