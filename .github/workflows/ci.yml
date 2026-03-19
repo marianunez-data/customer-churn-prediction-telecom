@@ -30,8 +30,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest tests/test_transform.py tests/test_predict.py tests/test_api.py \
-            -v --tb=short --no-header
+          pytest tests/ -v --tb=short --no-header
 
       - name: Upload test results
         if: always()
