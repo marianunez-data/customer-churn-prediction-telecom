@@ -3,10 +3,10 @@
 **Interconnect Telecom** — End-to-end ML pipeline for proactive churn prevention.
 
 [![Tests](https://img.shields.io/badge/tests-119%20passed-2ECC71)](https://github.com/marianunez-data/customer-churn-prediction-telecom)
+[![CI](https://github.com/marianunez-data/customer-churn-prediction-telecom/actions/workflows/ci.yml/badge.svg)](https://github.com/marianunez-data/customer-churn-prediction-telecom/actions/workflows/ci.yml)
 [![AUC](https://img.shields.io/badge/AUC-0.9078-00D4FF)](https://github.com/marianunez-data/customer-churn-prediction-telecom)
 [![API](https://img.shields.io/badge/API-live-2ECC71)](https://churn-api-ynok.onrender.com/docs)
 [![Dashboard](https://img.shields.io/badge/Dashboard-live-2ECC71)](https://churn-intelligence.streamlit.app/)
-
 ---
 
 ## Live
@@ -41,7 +41,7 @@
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
 | **Dashboard**          | Streamlit · Plotly · Matplotlib · Streamlit Cloud · HuggingFace Spaces                                                                                  |
 | **Containers**         | Docker · Docker Compose                                                                                                                                 |
-| **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub                                                                                                              |
+| **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub(CI/CD)                                                                                                       |
 
 ---
 
