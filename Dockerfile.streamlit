@@ -8,9 +8,8 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies from app/requirements.txt
-# (contains streamlit, plotly, shap, lightgbm, etc.)
-COPY app/requirements.txt .
+# Single source of truth for dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project

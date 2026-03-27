@@ -25,12 +25,13 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install -r app/requirements.txt
-          pip install pytest httpx great-expectations
 
       - name: Run tests
         run: |
           pytest tests/ -v --tb=short --no-header
+
+      - name: Verify model loads
+        run: python -c "from src.models.predict import load_champion; load_champion()"
 
       - name: Upload test results
         if: always()
