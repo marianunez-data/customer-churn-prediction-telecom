@@ -259,8 +259,6 @@ curl -X POST https://churn-api-ynok.onrender.com/predict \
 | **Single model vs ensemble** | Single LightGBM pipeline | Simpler deployment, faster inference (~12ms), easier to explain with SHAP | Stacked ensemble (LightGBM + XGBoost + logistic) behind a meta-learner |
 | **ROI framework** | Vc=$69, Cr=$20 from dataset statistics | Grounds business value in data, not assumptions; enables threshold optimization | Partner with finance for real retention program costs and CLV model |
 | **Free tier hosting** | Render (API) + Streamlit Cloud (Dashboard) | Zero-cost deployment for portfolio; demonstrates full serving layer | Migrate to AWS (ECS/Lambda) with auto-scaling, or GCP Cloud Run |
-| **SHAP on-demand** | Computed per-request via `include_shap=True` | Avoids latency penalty for bulk scoring; only computes when needed | Precompute SHAP for batch jobs, cache results in Redis |
-| **No feature store** | Features computed at inference time | Acceptable for 18 features and single-model serving | Feast or Tecton for feature consistency across training and serving |
 
 ### Known Limitations
 
