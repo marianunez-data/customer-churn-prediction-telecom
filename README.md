@@ -82,11 +82,11 @@ flowchart LR
 |                        |                                                                                                                                                         |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **ML**                 | LightGBM · XGBoost · scikit-learn · FLAML AutoML · SHAP (waterfall / beeswarm / dependence) · Platt Calibration · StratifiedKFold · OOF threshold sweep |
-| **Data & ETL**         | pandas · NumPy · sklearn Pipeline · ColumnTransformer · OrdinalEncoder · Great Expectations · ETL pipeline                                              |
+| **Data & ETL**         | pandas · NumPy · sklearn Pipeline · ColumnTransformer · OrdinalEncoder · Great Expectations                                                             |
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
-| **Dashboard**          | Streamlit · Plotly · Matplotlib · Streamlit Cloud · HuggingFace Spaces                                                                                  |
+| **Dashboard**          | Streamlit · Plotly · Matplotlib · HuggingFace Spaces                                                                                                    |
 | **Containers**         | Docker · Docker Compose                                                                                                                                 |
-| **Tracking & Testing** | MLflow · pytest (119 tests) · Git · GitHub Actions CI                                                                                                   |
+| **Tracking & Testing** | pytest (119 tests) · CI/CD (GitHub Actions)                                                                                                             |
 
 ---
 
