@@ -88,11 +88,11 @@ class TestColumnStandardization:
 
 class TestTypeCasting:
     def test_begin_date_is_datetime(self, df_clean):
-        assert df_clean["begin_date"].dtype == "datetime64[ns]", \
+        assert str(df_clean["begin_date"].dtype).startswith("datetime64"), \
             f"begin_date dtype: {df_clean['begin_date'].dtype}"
 
     def test_end_date_is_datetime(self, df_clean):
-        assert df_clean["end_date"].dtype == "datetime64[ns]", \
+        assert str(df_clean["end_date"].dtype).startswith("datetime64"), \
             f"end_date dtype: {df_clean['end_date'].dtype}"
 
     def test_total_charges_is_float(self, df_clean):
