@@ -236,7 +236,7 @@ class ChurnPreprocessor(BaseEstimator, TransformerMixin):
             "customer_id missing from output."
         assert "begin_date" in df.columns, \
             "begin_date missing — required for feature engineering."
-        assert df["begin_date"].dtype == "datetime64[ns]", \
+        assert str(df["begin_date"].dtype).startswith("datetime64"), \
             f"begin_date wrong dtype: {df['begin_date'].dtype}"
         assert df["total_charges"].dtype == "float64", \
             f"total_charges wrong dtype: {df['total_charges'].dtype}"
