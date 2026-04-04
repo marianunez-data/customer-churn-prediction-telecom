@@ -7,7 +7,7 @@
 [![AUC](https://img.shields.io/badge/AUC-0.9078-00D4FF)](https://github.com/marianunez-data/customer-churn-prediction-telecom)
 [![API](https://img.shields.io/badge/API-live-2ECC71)](https://churn-api-ynok.onrender.com/docs)
 [![Dashboard](https://img.shields.io/badge/Dashboard-live-2ECC71)](https://churn-intelligence.streamlit.app/)
-[![BI Report](https://img.shields.io/badge/BI%20Report-live-FF6B6B)](https://marianunez-data.github.io/churn_eda_dashboard.html)
+[![BI Report](https://img.shields.io/badge/BI%20Report-live-2ECC71)](https://marianunez-data.github.io/churn_eda_dashboard.html)
 
 ---
 
