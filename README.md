@@ -7,6 +7,7 @@
 [![AUC](https://img.shields.io/badge/AUC-0.9078-00D4FF)](https://github.com/marianunez-data/customer-churn-prediction-telecom)
 [![API](https://img.shields.io/badge/API-live-2ECC71)](https://churn-api-ynok.onrender.com/docs)
 [![Dashboard](https://img.shields.io/badge/Dashboard-live-2ECC71)](https://churn-intelligence.streamlit.app/)
+[![BI Report](https://img.shields.io/badge/BI%20Report-live-FF6B6B)](https://marianunez-data.github.io/churn_eda_dashboard.html)
 
 ---
 
@@ -34,6 +35,7 @@ flowchart LR
     subgraph Serving["Serving Layer"]
         API["FastAPI<br/>Render"]
         DASH["Streamlit Dashboard<br/>Streamlit Cloud<br/>HuggingFace Spaces"]
+| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
     end
 
     subgraph Testing["Quality Gates"]
@@ -58,6 +60,7 @@ flowchart LR
 | ------------------- | ------------------------------------------------------------------------- |
 | Streamlit Dashboard | https://churn-intelligence.streamlit.app/                                 |
 | HuggingFace Space   | https://huggingface.co/spaces/marianunez-data/customer-churn-intelligence |
+| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
 | FastAPI             | https://churn-api-ynok.onrender.com/docs                                  |
 
 > **Note:** FastAPI runs on Render's free tier — first request may take ~30s due to cold start.
@@ -85,6 +88,7 @@ flowchart LR
 | **Data & ETL**         | pandas · NumPy · sklearn Pipeline · ColumnTransformer · OrdinalEncoder · Great Expectations                                                             |
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
 | **Dashboard**          | Streamlit · Plotly · Matplotlib · HuggingFace Spaces                                                                                                    |
+| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
 | **Containers**         | Docker · Docker Compose                                                                                                                                 |
 | **Tracking & Testing** | pytest (119 tests) · CI/CD (GitHub Actions)                                                                                                             |
 
