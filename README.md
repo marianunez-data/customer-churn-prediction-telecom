@@ -35,7 +35,6 @@ flowchart LR
     subgraph Serving["Serving Layer"]
         API["FastAPI<br/>Render"]
         DASH["Streamlit Dashboard<br/>Streamlit Cloud<br/>HuggingFace Spaces"]
-| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
     end
 
     subgraph Testing["Quality Gates"]
@@ -60,7 +59,7 @@ flowchart LR
 | ------------------- | ------------------------------------------------------------------------- |
 | Streamlit Dashboard | https://churn-intelligence.streamlit.app/                                 |
 | HuggingFace Space   | https://huggingface.co/spaces/marianunez-data/customer-churn-intelligence |
-| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
+| BI Report | <https://marianunez-data.github.io/churn_eda_dashboard.html> |
 | FastAPI             | https://churn-api-ynok.onrender.com/docs                                  |
 
 > **Note:** FastAPI runs on Render's free tier — first request may take ~30s due to cold start.
@@ -88,7 +87,6 @@ flowchart LR
 | **Data & ETL**         | pandas · NumPy · sklearn Pipeline · ColumnTransformer · OrdinalEncoder · Great Expectations                                                             |
 | **API**                | FastAPI · Pydantic v2 · Uvicorn · Render                                                                                                                |
 | **Dashboard**          | Streamlit · Plotly · Matplotlib · HuggingFace Spaces                                                                                                    |
-| BI Report | https://marianunez-data.github.io/churn_eda_dashboard.html |
 | **Containers**         | Docker · Docker Compose                                                                                                                                 |
 | **Tracking & Testing** | pytest (119 tests) · CI/CD (GitHub Actions)                                                                                                             |
 
