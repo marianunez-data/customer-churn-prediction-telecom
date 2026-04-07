@@ -333,5 +333,6 @@ python -m src.models.train --budget 300   # longer search
 
 ## Author
 
-**Maria Camila Gonzalez Nuñez** · Data Scientist
-[GitHub](https://github.com/marianunez-data)
+**Maria Camila Gonzalez Nuñez**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-marianunez--data-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/marianunez-data)
