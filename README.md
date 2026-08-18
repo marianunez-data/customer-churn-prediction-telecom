@@ -256,7 +256,7 @@ curl -X POST https://churn-api-ynok.onrender.com/predict \
 | Decision | What I chose | Why | What I'd change at scale |
 | --- | --- | --- | --- |
 | **AutoML vs manual tuning** | FLAML 180s budget | Reproducible search over LightGBM + XGBoost in one run; beats hand-tuned baselines by +0.02 AUC | Longer budget (600s+), add CatBoost to search space, Optuna with Bayesian TPE |
-| **Threshold selection** | OOF sweep on validation set, θ=0.41 | Avoids test leakage; capacity constraint ≤25% keeps outreach feasible | A/B test multiple thresholds in production with real retention outcomes |
+| **Threshold selection** | OOF sweep on training set, θ=0.41 | Avoids test leakage; capacity constraint ≤25% keeps outreach feasible | A/B test multiple thresholds in production with real retention outcomes |
 | **Calibration method** | Platt Scaling on X_val (1,056 rows) | Simple, effective for binary classification; Brier 0.1013 confirms reliability | Isotonic regression if dataset grows beyond 10k; recalibrate monthly |
 | **Single model vs ensemble** | Single LightGBM pipeline | Simpler deployment, faster inference (~12ms), easier to explain with SHAP | Stacked ensemble (LightGBM + XGBoost + logistic) behind a meta-learner |
 | **ROI framework** | Vc=$69, Cr=$20 from dataset statistics | Grounds business value in data, not assumptions; enables threshold optimization | Partner with finance for real retention program costs and CLV model |
